@@ -33,9 +33,11 @@ namespace DatabaseFirstDWB_LMV
         public static void Excercise1()
         {
             //SELECT *FROM Employees; 
-            var employeeQry = new NORTHWNDContext().Employees.AsQueryable();
+            var employeeQry = GetEmployees();
             var output = employeeQry.ToList();
         }
+
+      
 
         public static void Excercise2()
         {
@@ -45,8 +47,7 @@ namespace DatabaseFirstDWB_LMV
             //var x = new { Id = 2, Title = "jkhsfjs" };
 
             //SELECT Title, FirstName, LastName FROM Employees WHERE Title = 'Sales Representative';
-            var employeeQry = new NORTHWNDContext()
-                .Employees.Select(s => new 
+            var employeeQry = GetEmployees().Select(s => new 
                 {
                      s.Title,
                      s.FirstName,
@@ -70,8 +71,7 @@ namespace DatabaseFirstDWB_LMV
         {
 
             //SELECT FirstName as Nombre, LastName as Apellido  FROM Employees WHERE Title<> 'Sales Representative
-            var employeeQry = new NORTHWNDContext()
-                .Employees.Select(s => new
+            var employeeQry = GetEmployees().Select(s => new
                 {
                     Nombre = s.FirstName,
                     Apellido = s.LastName,
@@ -86,7 +86,7 @@ namespace DatabaseFirstDWB_LMV
         {
             // UPDATE Employees SET NAME = ‘Nadia’ WHERE ID = 1; 
             
-            var currentEmployee = dbContext.Employees.Where(x => x.EmployeeId == 1).First();
+            var currentEmployee = GetEmployees().Where(x => x.EmployeeId == 1).First();
             currentEmployee.FirstName = "Mauricio";
             dbContext.Employees.Update(currentEmployee);
             dbContext.SaveChanges();
@@ -108,24 +108,20 @@ namespace DatabaseFirstDWB_LMV
             //dbContext.Add(newProduct);
             dbContext.Products.Add(newProduct);
             dbContext.SaveChanges();
-            
-            
-
         }
 
         public static void Excercise6(int id)
         {
-            var currentEmployee = dbContext.Employees.Where(x => x.EmployeeId == id).First();
+            var currentEmployee = GetEmployeeById(id);
 
             dbContext.Employees.Remove(currentEmployee);
             dbContext.SaveChanges();
-
         }
 
         //  Obtener los productos, el cliente y el empleado por Id de Order
         public static void Excercise7(int orderID)
         {
-            var qry = dbContext.Orders.Where(w => w.OrderId == orderID).Select(s => new
+            var qry = GetOrderById(orderID).Select(s => new
             {
 
                 Empleado = s.Employee.FirstName,
@@ -135,6 +131,26 @@ namespace DatabaseFirstDWB_LMV
 
             var result = qry.ToList();
         }
+
+        #region helpers
+        private static IQueryable<Employee> GetEmployees()
+        {
+            return dbContext.Employees.AsQueryable();
+        }
+
+        private static Employee GetEmployeeById(int id)
+        {
+            return GetEmployees().Where(x => x.EmployeeId == id).First();
+        }
+
+        private static IQueryable<Order> GetOrderById(int orderID)
+        {
+            return dbContext.Orders.Where(w => w.OrderId == orderID);
+        }
+
+        #endregion
+
+
         static void Main(string[] args)
         {
             //Excercise1();
