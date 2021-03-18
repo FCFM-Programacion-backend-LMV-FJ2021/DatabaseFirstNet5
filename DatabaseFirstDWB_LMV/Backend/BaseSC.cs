@@ -7,6 +7,6 @@ namespace DatabaseFirstDWB_LMV.Backend
 {
     public class BaseSC
     {
-        public NORTHWNDContext dbContext = new NORTHWNDContext();
+        protected NORTHWNDContext dbContext = new NORTHWNDContext();
     }
 }

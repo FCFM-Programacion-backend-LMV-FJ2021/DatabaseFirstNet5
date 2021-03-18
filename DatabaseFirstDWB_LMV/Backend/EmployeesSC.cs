@@ -1,4 +1,5 @@
-﻿using DatabaseFirstDWB_LMV.NorthwindData;
+﻿using DatabaseFirstDWB_LMV.Models;
+using DatabaseFirstDWB_LMV.NorthwindData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,18 @@ namespace DatabaseFirstDWB_LMV.Backend
 
             dbContext.Employees.Remove(currentEmployee);
             dbContext.SaveChanges();
+        }
+
+        public void AddEmployee(EmployeeModel newEmployee)
+        {
+
+            var newEmployeeReg = new Employee();
+            newEmployeeReg.FirstName = newEmployee.Name;
+            newEmployeeReg.LastName = newEmployee.LastName;
+            
+            dbContext.Employees.Add(newEmployeeReg);
+            dbContext.SaveChanges();
+
         }
     }
 }

@@ -116,13 +116,13 @@ namespace DatabaseFirstDWB_LMV
 
         static void Main(string[] args)
         {
-            Excercise1();
-            Excercise2();
-            Excercise3();
-            Excercise4();
-            Excercise5();
-            Excercise6(9);
-            Excercise7(10248);
+            //Excercise1();
+            //Excercise2();
+            //Excercise3();
+            //Excercise4();
+            //Excercise5();
+            //Excercise6(9);
+            //Excercise7(10248);
 
         }
     }
