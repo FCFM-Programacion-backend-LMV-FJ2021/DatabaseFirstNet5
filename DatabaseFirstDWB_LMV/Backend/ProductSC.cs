@@ -7,6 +7,7 @@ namespace DatabaseFirstDWB_LMV.Backend
 {
     public class ProductSC : BaseSC
     {
+   
         public void AddNewProduct(string productName, decimal price)
         {
             var newProduct = new NorthwindData.Product();
@@ -17,5 +18,7 @@ namespace DatabaseFirstDWB_LMV.Backend
             dbContext.Products.Add(newProduct);
             dbContext.SaveChanges();
         }
+
+
     }
 }

@@ -1,3 +1,4 @@
+using ApiRestNorthwnd.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,7 +28,7 @@ namespace ApiRestNorthwnd
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers(options=> options.Filters.Add(typeof(AutomaticExceptionTrigger)));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiRestNorthwnd", Version = "v1" });

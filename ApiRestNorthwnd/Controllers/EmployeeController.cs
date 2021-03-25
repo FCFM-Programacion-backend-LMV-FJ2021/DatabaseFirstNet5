@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DatabaseFirstDWB_LMV.Backend;
 using DatabaseFirstDWB_LMV.NorthwindData;
 using DatabaseFirstDWB_LMV.Models;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,28 +14,52 @@ namespace ApiRestNorthwnd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class EmployeeController : ControllerBase
     {
         // GET: api/<EmployeeController>
         [HttpGet]
-        public List<Employee> Get()
+        public IActionResult Get()
         {
-            var employees = new EmployeesSC().GetEmployees().ToList();
-            return employees;
+            try
+            {
+                //     OK(json)
+                return Ok(new EmployeesSC().GetEmployees().ToList());
+            }
+            catch (Exception ex)
+            {
+                return ThrowInternalErrorException(ex);
+            }
         }
 
         // GET api/<EmployeeController>/5
         [HttpGet("{id}")]
-        public Employee Get(int id)
+        public IActionResult Get(int id)
         {
-            return new EmployeesSC().GetEmployeeById(id);
+            try
+            {
+                return Ok(new EmployeesSC().GetEmployeeById(id));
+            }
+            catch (Exception ex)
+            {
+                return ThrowInternalErrorException(ex);
+            }
         }
 
         // POST api/<EmployeeController>
         [HttpPost]
-        public void Post([FromBody] EmployeeModel newEmployee)
+        public IActionResult Post([FromBody] EmployeeModel newEmployee)
         {
-            new EmployeesSC().AddEmployee(newEmployee);
+            try
+            {
+                new EmployeesSC().AddEmployee(newEmployee);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return ThrowInternalErrorException(ex);
+            }
+
         }
 
         // PUT api/<EmployeeController>/5
@@ -45,9 +70,25 @@ namespace ApiRestNorthwnd.Controllers
 
         // DELETE api/<EmployeeController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
-            new EmployeesSC().DeleteEmployeeById(id);
+            try
+            {
+                new EmployeesSC().DeleteEmployeeById(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return ThrowInternalErrorException(ex);
+            }
         }
+
+        #region helpers
+        private IActionResult ThrowInternalErrorException(Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+        }
+
+        #endregion
     }
 }

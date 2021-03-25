@@ -17,7 +17,12 @@ namespace DatabaseFirstDWB_LMV.Backend
 
         public  Employee GetEmployeeById(int id)
         {
-            return GetEmployees().Where(x => x.EmployeeId == id).First();
+            var employee =  GetEmployees().Where(x => x.EmployeeId == id).FirstOrDefault();
+
+            if (employee == null)
+                throw new Exception("El usuario con el id solicitado, no existe");
+
+            return employee;
         }
 
         public void UpdateEmployeeByID(int id)
@@ -37,8 +42,16 @@ namespace DatabaseFirstDWB_LMV.Backend
         {
             var currentEmployee = GetEmployeeById(id);
 
-            dbContext.Employees.Remove(currentEmployee);
-            dbContext.SaveChanges();
+            try
+            {
+                dbContext.Employees.Remove(currentEmployee);
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No se pudo guardar el cambio en base de datos: "
+                    + ex.Message + ". " + ex.InnerException != null ?  ex.InnerException.Message : "");
+            }
         }
 
         public void AddEmployee(EmployeeModel newEmployee)
